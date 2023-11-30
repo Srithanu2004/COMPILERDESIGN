@@ -1,0 +1,15 @@
+%{
+#include<stdio.h>
+%}
+%%
+[a-z] printf("%c",yytext[0]-('a' - 'A'));
+0 {return 0;}
+%%
+int main()
+{
+yylex();
+}
+int yywrap()
+{
+return 1;
+}
