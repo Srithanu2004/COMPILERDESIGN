@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX_EXPRESSIONS 10
+typedef struct {
+    char expression[50];
+    int isComputed;
+    int value;
+} Expression;
+Expression expressions[MAX_EXPRESSIONS];
+int expressionIndex = 0;
+void eliminateCommonSubexpressions();
+void printExpressions();
+int main() {
+    char inputExpression[50];
+    printf("Enter expressions (type 'done' to finish):\n");
+    while (1) {
+        printf("Expression %d: ", expressionIndex + 1);
+        fgets(inputExpression, sizeof(inputExpression), stdin);
+        inputExpression[strcspn(inputExpression, "\n")] = '\0';
+        if (strcmp(inputExpression, "done") == 0) {
+            break;
+        }
+        strcpy(expressions[expressionIndex].expression, inputExpression);
+        expressions[expressionIndex].isComputed = 0;
+        expressions[expressionIndex].value = 0;
+        expressionIndex++;
+    }
+    eliminateCommonSubexpressions();
+    printf("\nOptimized expressions:\n");
+    printExpressions();
+    return 0;
+}
+void eliminateCommonSubexpressions() {
+	int i;
+    for (i = 0; i < expressionIndex; i++) {
+        int j;
+		for ( j = i + 1; j < expressionIndex; j++) {
+            if (!expressions[j].isComputed && strcmp(expressions[i].expression, expressions[j].expression) == 0) {
+                expressions[j].isComputed = 1;
+                expressions[j].value = expressions[i].value;
+            }
+        }
+    }
+}
+void printExpressions() {
+    int i;
+	for ( i = 0; i < expressionIndex; i++) {
+        if (!expressions[i].isComputed) {
+            sscanf(expressions[i].expression, "%d", &expressions[i].value);
+            expressions[i].isComputed = 1;
+        }
+        printf("Expression %d: %s => Value: %d\n", i + 1, expressions[i].expression, expressions[i].value);
+    }
+}
