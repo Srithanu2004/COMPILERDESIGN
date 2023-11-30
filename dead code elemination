@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_STATEMENTS 10
+
+typedef struct {
+    char statement[50];
+    int isDead;
+} Statement;
+
+Statement statements[MAX_STATEMENTS];
+int statementIndex = 0;
+
+void eliminateDeadCode();
+void printStatements();
+
+int main() {
+    strcpy(statements[0].statement, "int a = 5;");
+    strcpy(statements[1].statement, "int b = a + 3;");
+    strcpy(statements[2].statement, "printf(\"Hello, World!\");");
+    strcpy(statements[3].statement, "int c = a * b;");
+    statementIndex = 4;
+
+    printf("Original statements:\n");
+    printStatements();
+
+    eliminateDeadCode();
+
+    printf("\nStatements after eliminating dead code:\n");
+    printStatements();
+
+    return 0;
+}
+
+void eliminateDeadCode() {
+    int i, j;
+
+    for (i = 0; i < statementIndex; i++) {
+        statements[i].isDead = 0;
+    }
+
+    for (i = 0; i < statementIndex; i++) {
+        if (strstr(statements[i].statement, "int") != NULL) {
+            char* variableDeclaration = strdup(statements[i].statement);
+            char* variableName = strtok(variableDeclaration, " ");
+            variableName = strtok(NULL, " ");
+            variableName = strtok(variableName, ";");
+
+            int used = 0;
+            for (j = 0; j < statementIndex; j++) {
+                if (j != i && strstr(statements[j].statement, variableName) != NULL) {
+                    used = 1;
+                    break;
+                }
+            }
+
+            free(variableDeclaration);
+
+            if (!used) {
+                statements[i].isDead = 1;
+            }
+        }
+    }
+}
+
+void printStatements() {
+    int i;
+
+    for (i = 0; i < statementIndex; i++) {
+        if (!statements[i].isDead) {
+            printf("%s\n", statements[i].statement);
+        }
+    }
+}
