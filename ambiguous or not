@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_RULES 100
+#define MAX_SYMBOL_LEN 10
+
+int isNonTerminal(char symbol) {
+    return symbol >= 'A' && symbol <= 'Z';
+}
+
+int hasLeftRecursion(char grammar[MAX_RULES][MAX_SYMBOL_LEN]) {
+    int i, j;
+    for (i = 0; i < MAX_RULES; ++i) {
+        char *rule = grammar[i];
+        if (rule[0] == '\0') {
+            break;
+        }
+
+        if (rule[0] == rule[3] && isNonTerminal(rule[0])) {
+            return 1; // Left recursion found
+        }
+    }
+
+    return 0; // No left recursion
+}
+
+int main() {
+    char grammar[MAX_RULES][MAX_SYMBOL_LEN];
+    int i;
+
+    // Initialize the grammar
+    strcpy(grammar[0], "S->aAb");
+    strcpy(grammar[1], "S->bBa");
+    strcpy(grammar[2], "A->c");
+    strcpy(grammar[3], "A->d");
+    strcpy(grammar[4], "B->e");
+
+    // Add an empty string to mark the end of the grammar
+    grammar[5][0] = '\0';
+
+    // Check for left recursion
+    if (hasLeftRecursion(grammar)) {
+        printf("The grammar is ambiguous.\n");
+    } else {
+        printf("The grammar is not ambiguous.\n");
+    }
+
+    return 0;
+}
