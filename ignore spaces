@@ -1,0 +1,28 @@
+#include <stdio.h>
+void ignoreRedundantSpacesAndComments() {
+    char c;
+    int insideComment = 0;
+    printf("Enter text:\n");
+    while ((c = getchar()) != EOF) {
+        if (c == '/') {
+            if ((c = getchar()) == '/') {
+                insideComment = 1;
+            } else {
+                putchar('/');
+                putchar(c);
+            }
+        } else if (c == '\n') {
+            insideComment = 0;
+            putchar('\n');
+        } else if (!insideComment) {
+            if (c != ' ' && c != '\t') {
+                putchar(c);
+            }
+        }
+    }
+}
+int main() 
+{
+    ignoreRedundantSpacesAndComments();
+    return 0;
+}
