@@ -1,0 +1,16 @@
+%{
+#include<stdio.h>
+%}
+%%
+[0-9]+[\t\n] {printf("%d is a digit",yytext);}
+. ;
+%%
+int main()
+{
+printf("\n Enter the input");
+yylex();
+}
+int yywrap()
+{
+return 1;
+}
