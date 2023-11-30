@@ -1,0 +1,17 @@
+%{
+#include <string.h>
+%}
+
+%%
+"good"    { printf("best"); }
+.|\n          { putchar(yytext[0]); }
+%%
+
+int main() {
+    yylex();
+    return 0;
+}
+int yywrap()
+{
+return 1;
+}
