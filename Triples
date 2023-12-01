@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Structure for a quadruple
+typedef struct {
+    char op[10];  // Operation
+    char arg1[10]; // Argument 1
+    char arg2[10]; // Argument 2
+    char result[10]; // Result
+} Quadruple;
+
+// Structure for a triple
+typedef struct {
+    char op[10];  // Operation
+    char arg1[10]; // Argument 1
+    char arg2[10]; // Argument 2
+} Triple;
+
+void generateQuadruplesAndTriples();
+
+int main() {
+    generateQuadruplesAndTriples();
+    return 0;
+}
+
+void generateQuadruplesAndTriples() {
+    Quadruple quadruples[] = {
+        {"+", "a", "b", "t1"},
+        {"*", "t1", "c", "t2"},
+        {"-", "t2", "d", "t3"}
+    };
+
+    Triple triples[sizeof(quadruples) / sizeof(quadruples[0])];
+
+    printf("Quadruples:\n");
+    int i;
+	for (i = 0; i < sizeof(quadruples) / sizeof(quadruples[0]); i++) {
+        printf("(%s, %s, %s, %s)\n", quadruples[i].op, quadruples[i].arg1, quadruples[i].arg2, quadruples[i].result);
+
+        // Copy relevant information to triples
+        strcpy(triples[i].op, quadruples[i].op);
+        strcpy(triples[i].arg1, quadruples[i].arg1);
+        strcpy(triples[i].arg2, quadruples[i].arg2);
+    }
+
+    printf("\nTriples:\n");
+	for (i = 0; i < sizeof(triples) / sizeof(triples[0]); i++) {
+        printf("(%s, %s, %s)\n", triples[i].op, triples[i].arg1, triples[i].arg2);
+    }
+}
